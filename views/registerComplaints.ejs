@@ -83,7 +83,9 @@
         </form>
 
         <br>
-        <img src="<%= typeof file != 'undefined' ? file : '' %>" alt="" style="width: 300px; height: 300px;">  
+        <img src="<%= typeof file != 'undefined' ? file : '' %>" alt="" > 
+        <!-- style="width: 300px; height: 300px;" --> 
+        <!-- <%= typeof file != 'undefined' ? file : '' %>     for src -->
         <!-- add css responsive img class -->
 
         <p class="lead mt-4">View all Complaints? <a href="/complaints">All Complaints</a></p>

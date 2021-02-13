@@ -1,8 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const expressLayouts = require("express-ejs-layouts");
-const multer = require('multer')
-const uuid = require('uuid').v4
+// const multer = require('multer')
+// const uuid = require('uuid').v4
 const path = require('path')
 
 const mainRoute = require('./routes/mainRoutes')
@@ -20,7 +20,9 @@ mongoose.connect('mongodb://localhost:27017/ImageUploadDB', {useNewUrlParser: tr
 
 
 const app = express()
-// app.use(express.static('public'))
+
+app.use(express.static(__dirname + '/public/'))
+// app.use(express.static('./uploads'))
 
 ////// EJS  SETUP  ///////
 app.use(expressLayouts);
@@ -33,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 /////////////////////////////////////////////////
 
 
-app.use(express.static('./uploads'))
+
 app.use('/', mainRoute)
 
 

@@ -1,41 +1,32 @@
 <header class="jumbotron">
-    <h1 class="mt-4">Employee List from DB</h1>
+    <h1 class="mt-4">All Complaints</h1>
 </header>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+<%= console.log(list) %>
+<div class="container">
+    <div class="row">
         <% if (list.length > 0){ %>
             <% list.forEach(function(row){ %>
-                <tr>
-                    <td><%= row.name %></td>
-                    <td><%= row.email %></td>
-                    <td><%= row.phone %></td> 
-                    <td>
-                        <!-- <a href="/employee/<% this._id %>"><i class="fa fa-filter fa-lg" aria-hidden="true"></i></a> -->
-                        <a href="/delete/<% this._id %>"
-                            onclick="return confirm('Are you sure you want to delete this record?')"><i
-                                class="fa fa-trash fa-lg" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                </tr>
+                <div class="col-md-3 col-sm-6">
+                    <div class="thumbnail">
+                        <img src="/uploads/<%= row.filePath %>" alt="">
+                        <div class="caption">
+                            <h4><%= row.originalname %></h4>
+                        </div>
+                    </div>
+                </div>        
             <% }) %>
-        <% }else{ %>
-            <tr>
-                <td colspan="3">No Record Found</td>
-            </tr>
+        <% }else{ %>            
+            <span>No Record Found</span>     
         <% } %>
+    </div>
+</div>
+
+
         
-    </tbody>
-</table>
+        
+   
 
 
-<a href="/dashboard" class="btn btn-secondary">Go Back</a>
-<a href="/users/logout" class="btn btn-secondary">Logout</a> 
+<a href="/" class="btn btn-secondary">Go Back</a>
+<a href="/" class="btn btn-secondary">Logout</a> 

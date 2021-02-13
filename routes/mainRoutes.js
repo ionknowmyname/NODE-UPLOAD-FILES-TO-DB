@@ -8,18 +8,25 @@ const path = require('path')
 
 /// to keep format of file type intact during uploads & Uploads ///
 const storage = multer.diskStorage({
-     // destination: './uploads'      // this also works
+    /*
     destination: (req, file, cb) => {  // cb = callback
-        cb(null, 'uploads/images/')   // uploads folder
+        cb(null, './public/uploads/')   // uploads folder
     },
+    */
+
+    destination: './public/uploads/',      // this also works
+    
     filename: (req, file, cb) => { 
         const ext = path.extname(file.originalname)
         const id = uuid()
         const filePath = `${id}${ext}`  // /images/${id}${ext}
-        Image.create({ filePath: filePath })
-        .then(() => {
-            cb(null, filePath) 
-        })    
+        cb(null, filePath)
+          
+        // add to DB
+        Image.create({ filePath: filePath })  // filepath from DB/Image model: filepath defined above
+        // .then(() => {
+        //     cb(null, filePath) 
+        // })    
     }
 })
 
@@ -29,7 +36,7 @@ const upload = multer({
     fileFilter: (req, file, cb) => {
         checkFileType(file, cb);   // makes sure only images are uploaded
     }  
-}).single('pic');
+}).single('pic');  // pic from the name on form
 
 
 function checkFileType(file, cb){
@@ -48,11 +55,22 @@ function checkFileType(file, cb){
 
 router.get('/complaints/new', (req, res) => { res.render('registerComplaints') })    // ejs
 
-router.get('/complaints', (req, res) => { res.render('images') })    // rendering ejs of complaints
+// rendering ejs of complaints
+router.get('/complaints', (req, res) => { 
+
+    Image.find((err, docs) => {
+        if(!err){
+            //console.log(docs);
+            res.render('images', { list: docs });   
+        }else{
+            console.log("Error in retrieving Images from DB: " + err);
+        }
+    });
+})    
 
 
 
-router.post('/complaints/new', /*upload.single('pic'), */ (req, res) => {  // where pic is name from file input type in html form
+router.post('/complaints/new', /* upload.single('pic'), */ (req, res) => {  // where pic is name from file input type in html form
    
     // status = submitted
 
@@ -67,7 +85,8 @@ router.post('/complaints/new', /*upload.single('pic'), */ (req, res) => {  // wh
             }else{
                 res.render('registerComplaints', { 
                     msg: 'File Uploaded!',
-                    file: `uploads/images/${req.file.filename}`
+                    file: `/uploads/${req.file.filename}`
+                   // file: `${req.file.destination}${req.file.filename}`  // (/) already added in destination
                 })
                 // res.redirect('/complaints')
             }
@@ -77,7 +96,16 @@ router.post('/complaints/new', /*upload.single('pic'), */ (req, res) => {  // wh
 
 router.post('/complaints', (req, res) => { 
     // handles searching on db
-    res.render('images', { list: docs }); 
+    Image.find((err, docs) => {
+        if(!err){
+            //console.log(docs);
+            res.render('images', { list: docs });   
+        }else{
+            console.log("Error in retrieving Images from DB: " + err);
+        }
+    });
+
+    
 })
 
 
